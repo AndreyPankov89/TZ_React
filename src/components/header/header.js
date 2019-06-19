@@ -5,15 +5,9 @@ import * as actions from '../../actions';
 import {bindActionCreators} from 'redux';
 
 class Header extends Component{
-    state={
-        current:'Perm',
-        hide:true
-    };
 
 
     cities=['perm','nsk','ekat'];
-
-
 
     renderMenu(){
         console.log(this.props);

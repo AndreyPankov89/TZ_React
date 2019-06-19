@@ -11,24 +11,21 @@ import {bindActionCreators} from 'redux';
 class ProgramGuide extends Component{
 
     tvService = new TvService();
-    state={
-        programs:[],
-        descr:"",
-        showDesc:false
-    };
-
+ 
+    //при изменении канала - запрос новой программы передач
     componentDidUpdate(prewProps){
         const {channelId,city} =this.props;
         if (prewProps.channelId !== channelId) {
+            //формируем границы времени для выборки
             let today = new Date();
             let tomorrow = new Date();
             today.setHours(today.getHours()-3);
             console.log(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-
             const start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}+${today.getHours()}%3A00%3A00`;
             const finish = `${tomorrow.getFullYear()}-${tomorrow.getMonth() + 1}-${tomorrow.getDate()}+${tomorrow.getHours()}%3A00%3A00`;
-            this.props.programLoad(undefined);
+
+            //запрос на получение программ
             this.tvService.getProgramsList(start, finish, city, channelId)
                 .then((programs) => {
                     console.log(programs[channelId]);
@@ -37,6 +34,7 @@ class ProgramGuide extends Component{
         }
     }
 
+    //генерируем список программ
     renderProgramsList(){
         const {programs,more} = this.props;
 
@@ -49,10 +47,12 @@ class ProgramGuide extends Component{
             const {start, title,tid,desc,duration} = item;
             let date = new Date(start);
 
+            //если нужен сокращенный вариант
             if ( more && i>10){
-                return
+                return null
             }
 
+            //формируем класс для отображения закончившейся, текущей и следующей программы
             let className = "program"+next;
             next = '';
             if (date<now){
@@ -89,6 +89,7 @@ class ProgramGuide extends Component{
     }
     render(){
 
+        //показываем / скрываем описание
         const dialog = this.props.showDesc?<Descr
             descr={this.props.desc}
             onCloseClick={this.props.closeDesc}
@@ -111,6 +112,7 @@ class ProgramGuide extends Component{
     }
 }
 
+//компонент свертывания/развертывания
 const More = ({onClick, text})=>{
     return (
         <div

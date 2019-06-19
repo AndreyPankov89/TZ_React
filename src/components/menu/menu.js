@@ -14,6 +14,7 @@ class Menu extends Component{
 
     tvService = new TvService();
 
+
     componentDidMount(){
         const city = this.props.city || 'perm';
         this.tvService.getChannelsList(city)
@@ -27,8 +28,9 @@ class Menu extends Component{
     }
 
     componentDidUpdate(prewProps){
-        if (this.props.city !== prewProps.city){
-            this.tvService.getChannelsList(this.props.city)
+        const city = this.props.city || 'perm';
+        if (city !== prewProps.city){
+            this.tvService.getChannelsList(city)
                 .then((channels)=>{
                     channels.sort((a,b)=>{return a.xvid-b.xvid});
                     const filteredChannels = removeDuplicate(channels,'xvid');

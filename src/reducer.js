@@ -1,4 +1,3 @@
-//const state
 
 export const reducer = (state= {
     citiesHide:true,
